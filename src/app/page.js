@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getSdkError } from '@walletconnect/utils'
 import { Core } from '@walletconnect/core'
@@ -11,7 +11,7 @@ import AuthRequest from './_components/AuthRequest'
 
 export let core, web3wallet
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -142,5 +142,13 @@ export default function Home() {
         <AuthRequest event={modal.data} wallets={wallets} closeModal={() => setModal(null)} />
       }
     </div>
+  )
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="container"><div>Loading...</div></div>}>
+      <HomeContent />
+    </Suspense>
   )
 }
